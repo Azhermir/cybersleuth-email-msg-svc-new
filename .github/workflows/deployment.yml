@@ -1,0 +1,120 @@
+name: Deploy email-message-svc api
+
+on:
+  push:
+    branches:
+      - Dev
+      - Test
+      - Stage
+      - Prod
+      - '**'  # All branches to handle feature branches
+env:
+  AWS_REGION: 'us-east-1'  # Adjust to your AWS region
+  ECR_REGISTRY: '${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com'
+  ECR_REPOSITORY: 'email-message-svc'  # Replace with your ECR repository
+  CONTAINER_NAME: 'email-message-svc'  # Replace with your container name in the task definition
+
+jobs:
+  DeployAPI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup maven and build jar
+        run: sudo apt install openjdk-17-jdk openjdk-17-jre && update-alternatives --config java && export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && sudo apt install maven && mvn --version && mvn install
+
+      - name: Log in to Amazon ECR
+        id: ecr-login
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
+          docker tag ${{ env.ECR_REPOSITORY }}:${{ github.sha }} ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Push Docker image to Amazon ECR
+        run: |
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          echo "image=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Download task definition (Dev)
+        if: github.ref == 'refs/heads/Dev'
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION_DEV }} --query taskDefinition > task-definition.json
+      - name: Download task definition (Test)
+        if: github.ref == 'refs/heads/Test'
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION_TEST }} --query taskDefinition > task-definition.json
+      - name: Download task definition (Stage)
+        if: github.ref == 'refs/heads/Stage'
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION_STAGE }} --query taskDefinition > task-definition.json
+      - name: Download task definition (Prod)
+        if: github.ref == 'refs/heads/Prod'
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION_PROD }} --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ env.image }}
+
+      # Conditionally deploy to the 'dev' environment
+      - name: Deploy to ECS (Dev)
+        if: github.ref == 'refs/heads/Dev'
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_DEV }}
+          cluster: ${{ secrets.ECS_CLUSTER_DEV }}
+          wait-for-service-stability: true
+
+      # Conditionally deploy to the 'test' environment
+      - name: Deploy to ECS (Test)
+        if: github.ref == 'refs/heads/Test'
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_TEST }}
+          cluster: ${{ secrets.ECS_CLUSTER_TEST }}
+          wait-for-service-stability: true
+
+      # Conditionally deploy to the 'stage' environment
+      - name: Deploy to ECS (Stage)
+        if: github.ref == 'refs/heads/Stage'
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_STAGE }}
+          cluster: ${{ secrets.ECS_CLUSTER_STAGE }}
+          wait-for-service-stability: true
+
+      # Conditionally deploy to the 'prod' environment
+      - name: Deploy to ECS (Prod)
+        if: github.ref == 'refs/heads/Prod'
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_PROD }}
+          cluster: ${{ secrets.ECS_CLUSTER_PROD }}
+          wait-for-service-stability: true
+
+      # Skip deployment for feature branches, just perform the build
+      - name: Skip Deployment
+        if: startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/Dev' && github.ref != 'refs/heads/Test' &&  github.ref != 'refs/heads/Stage' && github.ref != 'refs/heads/Prod'
+        run: echo "Feature branch detected. Only building, no deployment will be performed."

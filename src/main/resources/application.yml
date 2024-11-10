@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: email-message-svc
+aws:
+  dynamodb:
+    accessKeyId: AKIAVYA7TG45NVLUZWA3
+    secretAccessKey: 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
+    region: us-east-1
+    endpoint: https://dynamodb.us-east-1.amazonaws.com
+
+server:
+  servlet:
+    context-path: /email-message-svc

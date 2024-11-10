@@ -1,0 +1,9 @@
+type Email {
+    uid: String
+    cleanedText: String
+}
+
+type Query {
+    getEmail(uid: String!): Email
+    getEmails: [Email]
+}
