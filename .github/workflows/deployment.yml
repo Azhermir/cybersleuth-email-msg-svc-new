@@ -29,7 +29,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup maven and build jar
-        run: sudo apt install openjdk-17-jdk openjdk-17-jre && update-alternatives --config java && export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && sudo apt install maven && mvn --version && mvn install
+        run: sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list && sudo apt-get update -y && sudo apt install -y openjdk-17-jdk openjdk-17-jre && update-alternatives --config java && export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && sudo apt install maven && mvn --version && mvn install
 
       - name: Log in to Amazon ECR
         id: ecr-login
