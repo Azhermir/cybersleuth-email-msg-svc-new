@@ -1,7 +1,7 @@
 spring:
   application:
     name: email-message-svc
-aws:
+amazon:
   dynamodb:
     accessKeyId: AKIAVYA7TG45NVLUZWA3
     secretAccessKey: 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
@@ -10,4 +10,4 @@ aws:
 
 server:
   servlet:
-    context-path: /email-message-svc
+    context-path: /email-message

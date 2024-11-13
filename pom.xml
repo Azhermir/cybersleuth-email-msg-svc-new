@@ -11,8 +11,8 @@
 	<groupId>hlabs.ai</groupId>
 	<artifactId>email-message-svc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mailsleuth-dynamodb-svc</name>
-	<description>Project for DynamoDB integration</description>
+	<name>email-message-svc</name>
+	<description>Project for Email Message svc integration</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -45,17 +45,27 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
-			<version>2.7.18</version>
+			<version>3.3.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
-			<version>1.12.547</version>
+			<version>1.12.765</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.derjust</groupId>
+			<groupId>io.github.boostchicken</groupId>
 			<artifactId>spring-data-dynamodb</artifactId>
-			<version>5.1.0</version>
+			<version>5.2.5</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

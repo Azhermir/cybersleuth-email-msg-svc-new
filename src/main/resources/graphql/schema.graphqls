@@ -4,6 +4,7 @@ type Email {
 }
 
 type Query {
-    getEmail(uid: String!): Email
-    getEmails: [Email]
+    getEmailByUid(uid: String!): Email
+    getAllEmails: [Email]
+    getEmailsByUids(uids: [String!]!): [Email]
 }

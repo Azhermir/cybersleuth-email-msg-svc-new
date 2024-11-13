@@ -9,6 +9,7 @@ import java.util.List;
 
 @EnableScan
 public interface EmailRepository extends DynamoDBCrudRepository<Email, String> {
-    List<Email> getAllEmails();
-    Email findByUId(@Param("uid") String uid);
+    List<Email> findAll();
+    Email findByUid(@Param("uid") String uid);
+    List<Email> findAllByUidIn(List<String> uids);
 }
