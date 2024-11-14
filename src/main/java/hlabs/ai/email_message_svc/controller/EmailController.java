@@ -18,11 +18,6 @@ public class EmailController {
     private EmailService emailService;
 
     @QueryMapping
-    public List<Email> getAllEmails() {
-        return emailService.getAllEmails();
-    }
-
-    @QueryMapping
     public Email getEmailByUid(@Argument String uid) {
         return emailService.getEmailByUid(uid);
     }
