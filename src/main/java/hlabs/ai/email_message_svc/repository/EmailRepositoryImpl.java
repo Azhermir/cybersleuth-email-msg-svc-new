@@ -1,7 +1,6 @@
 package hlabs.ai.email_message_svc.repository;
 
 import hlabs.ai.email_message_svc.entity.Email;
-import hlabs.ai.email_message_svc.repository.EmailRepository;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
