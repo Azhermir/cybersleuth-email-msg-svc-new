@@ -15,6 +15,7 @@ public class WebConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.addAllowedOriginPattern("http://localhost:5173");
+        configuration.addAllowedOrigin("https://dev-mailsleuth.hlabs.ai");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("OPTIONS");
         configuration.addAllowedMethod("POST");
