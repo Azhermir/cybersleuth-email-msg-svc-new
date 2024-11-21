@@ -20,8 +20,6 @@ public class WebConfig {
         configuration.addAllowedMethod("OPTIONS");
         configuration.addAllowedMethod("POST");
         configuration.addAllowedMethod("GET");
-        configuration.addAllowedMethod("PUT");
-        configuration.addAllowedMethod("DELETE");
         source.registerCorsConfiguration("/**", configuration);
         return new CorsFilter(source);
     }
