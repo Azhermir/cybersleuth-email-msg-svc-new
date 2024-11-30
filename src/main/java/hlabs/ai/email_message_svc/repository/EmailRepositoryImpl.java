@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class EmailRepositoryImpl implements EmailRepository {
 
     private final DynamoDbClient dynamoDbClient;
-    private final String tableName = "EnronData-DataBase";
+    private final String tableName = "Enron-DB";
 
     public EmailRepositoryImpl(DynamoDbClient dynamoDbClient) {
         this.dynamoDbClient = dynamoDbClient;
