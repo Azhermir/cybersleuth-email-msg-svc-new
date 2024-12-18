@@ -1,4 +1,4 @@
-package hlabs.ai.email_message_svc.entity;
+package hlabs.ai.cybersleuth_email_msg_svc.entity;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package hlabs.ai.email_message_svc.repository;
+package hlabs.ai.cybersleuth_email_msg_svc.repository;
 
-import hlabs.ai.email_message_svc.entity.Email;
+import hlabs.ai.cybersleuth_email_msg_svc.entity.Email;
 import java.util.List;
 
 public interface EmailRepository {

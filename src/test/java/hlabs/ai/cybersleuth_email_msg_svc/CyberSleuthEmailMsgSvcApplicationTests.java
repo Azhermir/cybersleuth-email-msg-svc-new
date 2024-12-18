@@ -1,10 +1,10 @@
-package hlabs.ai.email_message_svc;
+package hlabs.ai.cybersleuth_email_msg_svc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EmailMessageSvcApplicationTests {
+class CyberSleuthEmailMsgSvcApplicationTests {
 
 	@Test
 	void contextLoads() {

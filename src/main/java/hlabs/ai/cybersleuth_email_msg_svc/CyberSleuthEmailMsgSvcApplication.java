@@ -1,4 +1,4 @@
-package hlabs.ai.email_message_svc;
+package hlabs.ai.cybersleuth_email_msg_svc;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class EmailMessageSvcApplication {
+public class CyberSleuthEmailMsgSvcApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EmailMessageSvcApplication.class, args);
+		SpringApplication.run(CyberSleuthEmailMsgSvcApplication.class, args);
 	}
 
 }

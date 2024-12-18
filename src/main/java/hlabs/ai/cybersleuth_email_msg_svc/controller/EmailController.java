@@ -1,7 +1,7 @@
-package hlabs.ai.email_message_svc.controller;
+package hlabs.ai.cybersleuth_email_msg_svc.controller;
 
-import hlabs.ai.email_message_svc.entity.Email;
-import hlabs.ai.email_message_svc.service.EmailService;
+import hlabs.ai.cybersleuth_email_msg_svc.entity.Email;
+import hlabs.ai.cybersleuth_email_msg_svc.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

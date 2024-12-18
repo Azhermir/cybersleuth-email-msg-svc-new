@@ -1,4 +1,4 @@
-package hlabs.ai.email_message_svc.config;
+package hlabs.ai.cybersleuth_email_msg_svc.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

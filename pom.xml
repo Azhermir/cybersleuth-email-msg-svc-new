@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>hlabs.ai</groupId>
-	<artifactId>email-message-svc</artifactId>
+	<artifactId>cybersleuth-email-msg-svc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>email-message-svc</name>
+	<name>cybersleuth-email-msg-svc</name>
 	<description>Project for Email Message svc integration</description>
 	<url/>
 	<licenses>

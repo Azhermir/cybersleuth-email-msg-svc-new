@@ -1,4 +1,4 @@
-name: Deploy email-message-svc api
+name: Deploy cybersleuth-email-msg-svc api
 
 on:
   push:
@@ -11,8 +11,8 @@ on:
 env:
   AWS_REGION: 'us-east-1'  # Adjust to your AWS region
   ECR_REGISTRY: '${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com'
-  ECR_REPOSITORY: 'email-message-svc'  # Replace with your ECR repository
-  CONTAINER_NAME: 'email-message-svc'  # Replace with your container name in the task definition
+  ECR_REPOSITORY: 'cybersleuth-email-msg-svc'  # Replace with your ECR repository
+  CONTAINER_NAME: 'cybersleuth-email-msg-svc'  # Replace with your container name in the task definition
 
 jobs:
   DeployAPI:
