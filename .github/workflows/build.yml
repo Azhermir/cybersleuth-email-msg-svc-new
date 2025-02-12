@@ -3,15 +3,20 @@ name: Build
 on:
   push:
     branches:
-      - main
-
+      - master # main branch name
+    paths:
+      - 'PROJECT1_PATH/**' # monorepo projects paths from the monorepo root directory
+      - 'PROJECT2_PATH/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  build:
-    name: Build
+  sonarQubeScan1:
+    name: sonarQubeScan1
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 17
@@ -30,9 +35,44 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+      - name: SonarQube Scan 1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_1 }}  # analysis token associated to your project
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Azhermir_cybersleuth-email-msg-svc-new_AZT7WDyRNk2828krEVQj
+        run: |
+            cd PROJECT1_PATH/
+            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=SONAR_PROJECT1_KEY -Dsonar.projectName='SONAR_PROJECT1_NAME' 
+        # Replace variables with project path, key and name
+  sonarQubeScan2:
+    name: sonarQubeScan2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Cache SonarQube packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: SonarQube Scan 2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_2 }} # analysis token associated to your project
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: run: |
+            cd PROJECT2_PATH/
+            mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=SONAR_PROJECT2_KEY -Dsonar.projectName='SONAR_PROJECT2_NAME'
+        # Replace variables with project path, key and name
+  # Add other scan jobs if you wish to scan more projects in the monorepo   
