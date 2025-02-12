@@ -29,7 +29,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<sonar.host.url>https://sonarqube.hlabs.ai</sonar.host.url>
-		<sonar.login>your_generated_token</sonar.login>
+		<sonar.login>squ_2eba09c8066bb94b9db6f2cd2c7486e43e916b4a</sonar.login>
 	</properties>
 	<dependencies>
 		<dependency>
