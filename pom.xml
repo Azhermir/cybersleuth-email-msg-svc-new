@@ -13,6 +13,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cybersleuth-email-msg-svc</name>
 	<description>Project for Email Message svc integration</description>
+	<properties>
+    	<sonar.host.url>http://your-sonarqube-server:9000</sonar.host.url>
+	</properties>
+
 	<url/>
 	<licenses>
 		<license/>
